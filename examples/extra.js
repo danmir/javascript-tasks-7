@@ -18,7 +18,8 @@ console.log(
     numbers.check.hasKeys(['0', '1', '2']), // true
     numbers.check.hasLength(3), // true
 
-    numbers.check.hasValues([2, 1]), // true
+    numbers.check.hasValues([2, 1]), // false
+    // Из условия - "только" заданные значения
 
     func.check.hasParamsCount(2), // true
 

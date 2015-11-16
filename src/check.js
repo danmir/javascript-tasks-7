@@ -88,21 +88,36 @@ function getType(obj) {
     return types[Object.prototype.toString.call(obj)];
 }
 
+var protoExtList = {
+    object: ['containsKeys', 'hasKeys', 'containsValues', 'hasValues', 'hasValueType'],
+    array: ['containsKeys', 'hasKeys', 'containsValues', 'hasValues', 'hasValueType', 'hasLength'],
+    string: ['hasLength', 'hasWordsCount'],
+    function: ['hasParamsCount']
+};
+
+function checkNamespace () {
+    return {
+        containsKeys: checkContainsKeys,
+        hasKeys: checkHasKeys,
+        hasValueType: checkHasValueType,
+        hasLength: checkHasLength,
+        hasValues: checkHasValues,
+        containsValues: checkContainsValues,
+        hasParamsCount: checkHasParamsCount,
+        hasWordsCount: checkHasWordsCount
+    }
+}
+
 exports.init = function () {
-    Object.prototype.checkContainsKeys = checkContainsKeys;
+    Object.defineProperty(Object.prototype, 'check', {
+        get: function() {
+            var checkNsMethods = checkNamespace();
 
-    Object.prototype.checkHasKeys = checkHasKeys;
-
-    Object.prototype.checkHasValueType = checkHasValueType;
-
-    Array.prototype.checkHasLength = checkHasLength;
-    String.prototype.checkHasLength = checkHasLength;
-
-    Object.prototype.checkHasValues = checkHasValues;
-
-    Object.prototype.checkContainsValues = checkContainsValues;
-
-    Function.prototype.checkHasParamsCount = checkHasParamsCount;
-
-    String.prototype.checkHasWordsCount = checkHasWordsCount;
+            var typeOfObject = getType(this);
+            protoExtList[typeOfObject].forEach(function (method) {
+                checkNsMethods[method] = checkNsMethods[method].bind(this);
+            }, this);
+            return checkNsMethods;
+        }
+    });
 };
