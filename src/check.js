@@ -95,7 +95,7 @@ var protoExtList = {
     function: ['hasParamsCount']
 };
 
-function checkNamespace () {
+function checkNamespace() {
     return {
         containsKeys: checkContainsKeys,
         hasKeys: checkHasKeys,
@@ -105,12 +105,12 @@ function checkNamespace () {
         containsValues: checkContainsValues,
         hasParamsCount: checkHasParamsCount,
         hasWordsCount: checkHasWordsCount
-    }
+    };
 }
 
 exports.init = function () {
     Object.defineProperty(Object.prototype, 'check', {
-        get: function() {
+        get: function () {
             var checkNsMethods = checkNamespace();
 
             var typeOfObject = getType(this);
